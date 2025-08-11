@@ -45,12 +45,12 @@ When you run `rails new`, you can choose to include or skip various tools and fr
 Inside the dev container terminal, run:
 
 ```sh
-rails new myapp --database=postgresql --css=tailwind
+rails new . --database=postgresql --css=tailwind
 ```
 
 This will:
 
-- Create a new Rails app in the `myapp` directory
+- Create a new Rails app in the current directory
 - Configure it to use PostgreSQL as the database
 - Set up Tailwind CSS for styling
 
@@ -70,6 +70,38 @@ This will:
 
 5. **Enjoy Zsh**
    The terminal uses Zsh with plugins for a modern shell experience.
+
+## Setup the postgresDB after generate the rails app
+1. Go to the config/database.yml file
+2. in the default or any env, the credentiasl should looks like
+```yaml
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  # For details on connection pooling, see Rails configuration guide
+  # https://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  username: <%= ENV['ENV_USERNAME'] %>
+  password: <%= ENV['ENV_PASSWORD'] %>
+  host: <%= ENV['ENV_HOST'] %>
+  port: 5432
+```
+3. create an .env file in root directory with this:
+```yaml
+ENV_USERNAME=postgres
+ENV_PASSWORD=postgres
+ENV_HOST=localhost
+```
+4. and to the gemfile the next lines:
+```rb
+# Load environment variables from .env files
+gem "dotenv-rails", groups: [ :development, :test ]
+```
+5. in the console type the next:
+```sh
+rails db:setup
+```
+6. and that's it, you now have setuped up the db
 
 ---
 
